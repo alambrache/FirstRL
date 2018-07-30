@@ -26,9 +26,9 @@ class GameMap:
 
             if not any([entity for entity in entities if entity.x == x and entity.y == y]):
                 if randint(0, 100) < 80:
-                    monster = Entity(x, y, 'o', libtcod.desaturated_green)
+                    monster = Entity(x, y, 'o', libtcod.desaturated_green, 'Orc', blocks=True)
                 else:
-                    monster = Entity(x, y, 'T', libtcod.darker_green)
+                    monster = Entity(x, y, 'T', libtcod.darker_green, 'Troll', blocks=True)
 
                 entities.append(monster)
 
@@ -45,7 +45,8 @@ class GameMap:
 
         return False
 
-    def make_map(self, max_rooms, room_min_size, room_max_size, map_width, map_height, player):
+    def make_map(self, max_rooms, room_min_size, room_max_size, map_width, map_height, player, entities,
+                 max_monsters_per_room):
         rooms = []
         num_rooms = 0
 
@@ -93,6 +94,9 @@ class GameMap:
                         # first move vertically, then horizontally
                         self.create_v_tunnel(prev_y, new_y, prev_x)
                         self.create_h_tunnel(prev_x, new_x, new_y)
+
+
+                self.place_entities(new_room, entities, max_monsters_per_room)
 
                 # finally, append the new room to the list
                 rooms.append(new_room)
